@@ -1,11 +1,13 @@
 import { Container, Text, VStack, Button, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { useEvents, useAddEvent } from "../integrations/supabase/index.js";
+import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
 const Index = () => {
   const { data: events, isLoading, error } = useEvents();
   const addEventMutation = useAddEvent();
   const [newEvent, setNewEvent] = useState({ name: "", date: "", description: "", venue_id: 1, is_pinned: false });
+  const { logout } = useSupabaseAuth();
 
   const handleAddEvent = () => {
     addEventMutation.mutate(newEvent);
@@ -30,6 +32,7 @@ const Index = () => {
         <Input placeholder="Event Date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} />
         <Input placeholder="Event Description" value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} />
         <Button onClick={handleAddEvent}>Add Event</Button>
+        <Button onClick={logout}>Logout</Button>
       </VStack>
     </Container>
   );
