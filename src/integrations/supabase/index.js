@@ -42,6 +42,12 @@ Venues // table: venues
     created_at: string
     updated_at: string
 
+Users // table: users
+    id: number
+    email: string
+    created_at: string
+    updated_at: string
+
 */
 
 // Hooks for Events
@@ -85,6 +91,21 @@ export const useAddVenue = () => {
         mutationFn: (newVenue) => fromSupabase(supabase.from('venues').insert([newVenue])),
         onSuccess: () => {
             queryClient.invalidateQueries('venues');
+        },
+    });
+};
+
+// Hooks for Users
+export const useUsers = () => useQuery({
+    queryKey: ['users'],
+    queryFn: () => fromSupabase(supabase.from('users').select('*')),
+});
+export const useAddUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newUser) => fromSupabase(supabase.from('users').insert([newUser])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('users');
         },
     });
 };
